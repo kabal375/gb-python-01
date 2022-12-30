@@ -29,8 +29,13 @@ def create_equasion(factors: dict) -> str:
 
     return ' + '.join(eq) + ' = 0'
 
+def save2file(filename: str, str2save: str):
+    with open(filename, "w") as f:
+        f.write(str2save)
+
 n = int(input('Введите N: '))
 factors = create_factors(n)
 # factors = {0: 12, 1: 50, 2: 59, 3: 0}
-print(factors)
-print(create_equasion(factors))
+eq = create_equasion(factors)
+print(eq)
+save2file('eq2.txt', eq)
