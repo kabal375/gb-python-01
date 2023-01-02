@@ -8,14 +8,16 @@ from random import randint
 def create_factors(n: int) -> dict:
     factors = {}
     for i in range(0, n+1):
-        factors[i] = randint(0, 100)
+        factors[i] = randint(-100, 100)
 
     return factors
 
 
 def create_equasion(factors: dict) -> str:
-    eq = []
-    x_part = ''
+    eq_list = []
+    x_part: str
+    f_part: str
+
     for i in range(len(factors) - 1, -1, -1):
         if factors.get(i) != 0:
             if i == 0:
@@ -25,9 +27,16 @@ def create_equasion(factors: dict) -> str:
             else:
                 x_part = ' * x**' + str(i)
 
-            eq.append(str(factors.get(i)) + x_part)
+            if factors.get(i) == 1:
+                f_part = ''
+                x_part = x_part.replace(' * ', '')
+            else:
+                f_part = str(factors.get(i))
 
-    return ' + '.join(eq) + ' = 0'
+            eq_list.append(f_part + x_part)
+
+
+    return (' + '.join(eq_list) + ' = 0').replace('+ -', '- ')
 
 def save2file(filename: str, str2save: str):
     with open(filename, "w") as f:
