@@ -6,12 +6,8 @@
 
 from random import randint
 
-source_list = []
-res_list = []
+source_list = [randint(-10, 10) for _ in range(randint(3, 10))]
 res_list_len = 0
-
-for _ in range(randint(3, 10)):
-    source_list.append(randint(-10, 10))
 
 print(f'Исходный список: {source_list}')
 
@@ -20,7 +16,6 @@ if len(source_list) % 2 == 0:
 else:
     res_list_len = len(source_list)//2 + 1
 
-for i in range(res_list_len):
-    res_list.append(source_list[i] + source_list[len(source_list) - 1 - i])
+res_list = [source_list[i] + source_list[len(source_list) - 1 - i] for i in range(res_list_len)]
 
 print(f'Список сумм: {res_list}')
