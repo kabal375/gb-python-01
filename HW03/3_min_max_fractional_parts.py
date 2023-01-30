@@ -4,27 +4,15 @@
 # [1.1, 1.2, 3.1, 5, 10.01] => 0.19
 
 from random import randint, uniform
-from unicodedata import decimal
 
-source_list = []
-# source_list = [1.1, 1.2, 3.1, 5, 10.01]
-
-for _ in range(randint(3, 10)):
-    fract_part = randint(0, 3)
-    source_list.append(round(uniform(0, 10), fract_part))
+source_list = [round(uniform(0, 10), randint(1, 3)) for _ in range(randint(3, 10))]
 
 print(f'Исходный список: {source_list}')
+#brain damaging list of fractional parts that aren't zeroes creation
+fract_parts_list = list(filter(lambda i: i != 0, (map(lambda i: i - int(i), source_list))))
 
-fmin = None
-fmax = None
+fmin = round(min(fract_parts_list), 3)
+fmax = round(max(fract_parts_list), 3)
 
-for i in source_list:
-    f = (i - int(i))
-    if f != 0:
-        if (fmin is None) or (fmin > f):
-            fmin = f
-        if (fmax is None) or (fmax < f):
-            fmax = f
-
-print(round(fmax - fmin, 3))
-
+print(f'Макс. значение: {fmax}, мин. значение: {fmin}')
+print(f'Разница: {round(fmax - fmin, 3)}')
