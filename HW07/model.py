@@ -12,3 +12,4 @@ def read_db(path: str) -> list:
             id_dict['phone'] = line[2]
             id_dict['comment'] = line[3]
             db_list.append(id_dict)
+

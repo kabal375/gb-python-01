@@ -17,6 +17,7 @@ def main_menu() -> int:
 
 def show_all(db: list):
     if db_success(db):
+        print('Список контактов:')
         for i in range(len(db)):
             user_id = i + 1
             print('\t', user_id, end='. ')
@@ -25,9 +26,10 @@ def show_all(db: list):
             print()
 
 
-def db_success(db: list) -> bool:
+def db_success(db: list, no_message=True) -> bool:
     if db:
-        print('Телефонная книга открыта')
+        if not no_message:
+            print('Телефонная книга открыта')
         return True
     else:
         print('Телефонная книга пуста или не открыта')
@@ -38,11 +40,40 @@ def exit_program():
     print('Завершение программы')
     exit()
 
-def create_contact():
-    print('Создание нового контакта')
-    new_contact = dict()
-    new_contact['lastname'] = input('   Введите фамилию: ')
-    new_contact['firstname'] = input('   Введите имя: ')
-    new_contact['phone'] = input('   Введите телефон: ')
-    new_contact['comment'] = input('   Введите комментарий: ')
-    return new_contact
+
+def change_contact_form(contact_data=dict(), new=True) -> dict:
+    if new:
+        print('Создание нового контакта')
+    else:
+        print('Редактирование данных контакта')
+    contact_data['lastname'] = input(f'\tВведите фамилию ({contact_data.get("lastname", "--")}): ')
+    contact_data['firstname'] = input(f'\tВведите имя ({contact_data.get("firstname", "--")}): ')
+    contact_data['phone'] = input(f'\tВведите телефон ({contact_data.get("phone", "--")}): ')
+    contact_data['comment'] = input(f'\tВведите комментарий ({contact_data.get("comment", "--")}): ')
+    return contact_data
+
+
+def press_enter_key():
+    print('Нажмите Enter для продолжения...')
+    input()
+
+
+def get_contact_id() -> int:
+    contact_id = -1
+    try:
+        contact_id = int(input('Введите номер контактка: '))
+    except ValueError:
+        print_error_message(1)
+
+    return contact_id
+
+def print_error_message(err_no: int):
+    message: str
+    match err_no:
+        case 1:
+            message = 'Введены некорректные данные'
+        case 2:
+            message = 'Контакт с таким номером не обнаружен'
+
+    print(message)
+    press_enter_key()
