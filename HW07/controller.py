@@ -6,27 +6,42 @@ def input_handler(inp: int):
     match inp:
         case 1:
             # показать справочник
-            view.show_all(model.db_list)
-            view.press_enter_key()
+            if view.db_success(model.db_list):
+                view.show_all(model.db_list)
+                view.press_enter_key()
         case 2:
             # открыть файл базы
-            model.read_db('database.txt')
+            model.db_list = model.read_db('database.txt')
             view.db_success(model.db_list, False)
         case 3:
             # сохранить файл
-            pass
+            if view.db_success(model.db_list):
+                model.save_data(model.db_list)
         case 4:
             # Новый контакт
-            model.db_list.append(view.change_contact_form())
+            if view.db_success(model.db_list):
+                model.db_list.append(view.change_contact_form())
         case 5:
             # Изменить контакт
-            edit_contact(model.db_list)
+            if view.db_success(model.db_list):
+                edit_contact(model.db_list)
         case 6:
             # Удалить контакт
-            pass
+            if view.db_success(model.db_list):
+                delete_contact(model.db_list)
         case 7:
+            # Поиск контакта
+            view.show_filtered(model.db_list, view.search_request())
+            view.press_enter_key()
+        case 8:
             # Выход
-            # TODO проверка на сохранение изменений
+            temp_db_list = model.read_db('database.txt')
+            if model.db_list != temp_db_list:
+                print('\tНесохранённые изменения!')
+                to_save = input('Введите 1 для сохранения и 0 для отмены: ')
+                if to_save:
+                    model.save_data(model.db_list)
+
             view.exit_program()
 
 
@@ -36,27 +51,27 @@ def start_program():
         input_handler(user_inp)
 
 
-def get_contact(db: list, id: int) -> dict:
-    if view.db_success(db):
-        return db[id]
+def get_contact(db: list, contact_id: int) -> dict:
+    return db[contact_id]
 
-def set_contact(db: list, id: int, contact_data: dict):
-    db[id] = contact_data
+def set_contact(db: list, contact_id: int, contact_data: dict):
+    db[contact_id] = contact_data
 
 
 def edit_contact(db: list):
-    if view.db_success(db):
-        contact_id = view.get_contact_id() - 1
-        if contact_id > -1:
-            try:
-                contact_data =  db[contact_id]
-            except IndexError:
-                view.print_error_message(2)
-                contact_data = dict()
-        else:
-            view.print_error_message(1)
-            contact_data = dict()
-        if contact_data:
-            contact_data = view.change_contact_form(contact_data, False)
-            set_contact(db, contact_id, contact_data)
+    contact_id = view.get_contact_id() - 1
+    try:
+        contact_data = get_contact(db, contact_id)
+    except IndexError:
+        view.print_error_message(2)
+        contact_data = dict()
+    if contact_data:
+        contact_data = view.change_contact_form(contact_data, False)
+        set_contact(db, contact_id, contact_data)
 
+def delete_contact(db: list):
+    contact_id = view.get_contact_id() - 1
+    try:
+        del db[contact_id]
+    except IndexError:
+        view.print_error_message(2)

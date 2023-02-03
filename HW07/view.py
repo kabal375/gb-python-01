@@ -5,6 +5,7 @@ def main_menu() -> int:
                  'Создать контакт',
                  'Изменить контакт',
                  'Удалить контакт',
+                 'Поиск контакта',
                  'Выход'
                  ]
     print('Главное меню:')
@@ -16,14 +17,13 @@ def main_menu() -> int:
 
 
 def show_all(db: list):
-    if db_success(db):
-        print('Список контактов:')
-        for i in range(len(db)):
-            user_id = i + 1
-            print('\t', user_id, end='. ')
-            for v in db[i].values():
-                print(f'{v}', end=' ')
-            print()
+    print('Список контактов:')
+    for i in range(len(db)):
+        user_id = i + 1
+        print('\t', user_id, end='. ')
+        for v in db[i].values():
+            print(f'{v}', end=' ')
+        print()
 
 
 def db_success(db: list, no_message=True) -> bool:
@@ -59,13 +59,13 @@ def press_enter_key():
 
 
 def get_contact_id() -> int:
-    contact_id = -1
     try:
         contact_id = int(input('Введите номер контактка: '))
     except ValueError:
         print_error_message(1)
 
     return contact_id
+
 
 def print_error_message(err_no: int):
     message: str
@@ -77,3 +77,25 @@ def print_error_message(err_no: int):
 
     print(message)
     press_enter_key()
+
+
+def search_request() -> str:
+    return input('Введите строку для поиска: ').strip().lower()
+
+def show_filtered(db: list, request: str):
+    # print('Список контактов:')
+    for i in range(len(db)):
+        match_found = False
+        user_id = i + 1
+        record = db[i].values()
+        # print(record)
+        for element in record:
+            if request in element.lower():
+                match_found = True
+                break
+        if match_found:
+            print('\t', user_id, end='. ')
+            for v in record:
+                print(f'{v}', end=' ')
+            print()
+
