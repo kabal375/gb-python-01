@@ -27,6 +27,3 @@ def save_db(path: str):
                 subline.append(s + ':' + ','.join(m))
             line += '|'.join(subline)
             file.write(line + '\n')
-
-read_db('7B.txt')
-save_db("7A.txt")
