@@ -80,7 +80,7 @@ async def com_any_other(message: types.Message):
                 else:
                     await message.answer(f'В куче осталось {game.total} конфет')
         else:
-            await message.answer(f'Слишком много хочешь звять. Максимум: {min(game.max_n, game.total)} конфет')
+            await message.answer(f'Нельзя столько взять. Максимум: {min(game.max_n, game.total)} конфет')
 
 
     else: 
