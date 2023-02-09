@@ -75,7 +75,7 @@ async def com_any_other(message: types.Message):
                 game.bot_turn()
                 if game.total == 0:
                     await message.answer('Конфеты кончились. Моя победа!')
-                    game.end_game
+                    game.end_game()
                     await message.answer(f' Значения размера кучи конфет и количества за ход сброшены, но могут быть заданы снова')
                 else:
                     await message.answer(f'В куче осталось {game.total} конфет')
